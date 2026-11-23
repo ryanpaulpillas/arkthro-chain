@@ -2,7 +2,7 @@ node_modules/
 devnet/
 *.key.json
 testnet/
-cyvber-bundle*
+arkthro-bundle*
 devnet-backup*/
 legal/
 .DS_Store

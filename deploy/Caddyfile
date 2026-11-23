@@ -1,16 +1,16 @@
 # Caddy gets and renews HTTPS certificates for these names automatically.
 # DNS for each name must point at this server before Caddy starts.
 
-cyvber.com, www.cyvber.com {
+arkthro.com, www.arkthro.com {
 	encode gzip
-	# The AI assistant (cyvber-assistant service); answers stream as server-sent events.
+	# The AI assistant (arkthro-assistant service); answers stream as server-sent events.
 	handle /api/assistant* {
 		reverse_proxy 127.0.0.1:8787 {
 			flush_interval -1
 		}
 	}
 	handle {
-		root * /opt/cyvber/site
+		root * /opt/arkthro/site
 		file_server
 	}
 	header {
@@ -21,16 +21,16 @@ cyvber.com, www.cyvber.com {
 }
 
 # Block explorer and JSON API, served by validator node 1.
-explorer.cyvber.com, rpc.cyvber.com {
+explorer.arkthro.com, rpc.arkthro.com {
 	encode gzip
 	reverse_proxy 127.0.0.1:26601
 }
 
-faucet.cyvber.com {
-	redir https://cyvber.com/#start
+faucet.arkthro.com {
+	redir https://arkthro.com/#start
 }
 
 # The other domains we own forward to the main site, keeping the path.
-cyvber.io, www.cyvber.io, cyvber.org, www.cyvber.org, cyvber.co, www.cyvber.co, cyvber.net, www.cyvber.net {
-	redir https://cyvber.com{uri} permanent
+arkthro.io, www.arkthro.io, arkthro.org, www.arkthro.org, arkthro.co, www.arkthro.co, arkthro.net, www.arkthro.net {
+	redir https://arkthro.com{uri} permanent
 }

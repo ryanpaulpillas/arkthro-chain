@@ -26,9 +26,9 @@ async function waitFor(check, timeoutMs = 20_000) {
 
 function genesisFor(validators) {
   return {
-    chainId: 'cyvber-discovery-test',
+    chainId: 'arkthro-discovery-test',
     timestamp: Date.now(),
-    coin: { name: 'CYVBER', symbol: 'CYV', decimals: 18 },
+    coin: { name: 'ARKTHRO', symbol: 'ARKTH', decimals: 18 },
     blockTimeMs: 150,
     maxTxsPerBlock: 100,
     minFee: '1000',
@@ -42,7 +42,7 @@ function genesisFor(validators) {
 test('private and loopback hosts are never shared or dialled', () => {
   for (const h of ['localhost', '127.0.0.1', '10.0.0.5', '172.20.1.1', '192.168.1.9', '169.254.1.1', '100.64.0.1', '0.0.0.0', '[::1]', 'fd00::1', 'fe80::1', 'node.local'])
     assert.equal(isPrivateHost(h), true, h);
-  for (const h of ['rpc.cyvber.com', '188.166.223.3', '8.8.8.8', '172.32.0.1', '[2a03:b0c0::1]'])
+  for (const h of ['rpc.arkthro.com', '188.166.223.3', '8.8.8.8', '172.32.0.1', '[2a03:b0c0::1]'])
     assert.equal(isPrivateHost(h), false, h);
 });
 

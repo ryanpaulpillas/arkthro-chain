@@ -16,6 +16,9 @@ import { addressFromPublicKey, publicKeyFromPrivate } from './crypto.js';
 
 const SCRYPT = { N: 2 ** 17, r: 8, p: 1 };
 const MIN_PASSPHRASE = 12;
+const LEGACY_PREFIXES = ['cy', 'ag'];
+// True when two addresses are the same account, allowing the older prefixes in key files.
+export const sameAddress = (current, stored) => current === stored || (typeof stored === 'string' && LEGACY_PREFIXES.includes(stored.slice(0, 2)) && stored.slice(2) === current.slice(2));
 
 const aad = (file) => Buffer.from(JSON.stringify([file.address, file.type, file.publicKey]));
 const kdf = (passphrase, salt, { N, r, p }) => crypto.scryptSync(passphrase.normalize('NFKC'), salt, 32, { N, r, p, maxmem: 256 * 1024 * 1024 });
@@ -52,7 +55,8 @@ export function decryptKeyFile(file, passphrase) {
   } catch {
     throw new Error('wrong passphrase (or the key file was changed)');
   }
-  if (publicKeyFromPrivate(privateKey) !== file.publicKey || addressFromPublicKey(file.publicKey) !== file.address) {
+  // Key files made before the ARKTHRO rename show the same address with the older prefix ("cy" or "ag").
+  if (publicKeyFromPrivate(privateKey) !== file.publicKey || !sameAddress(addressFromPublicKey(file.publicKey), file.address)) {
     throw new Error('key file is inconsistent: the decrypted key does not match its address');
   }
   const { encrypted, ...pub } = file;

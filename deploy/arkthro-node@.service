@@ -1,0 +1,23 @@
+# One ARKTHRO node; %i is the node number (arkthro-node@1 … arkthro-node@4).
+[Unit]
+Description=ARKTHRO testnet node %i
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=arkthro
+Group=arkthro
+WorkingDirectory=/opt/arkthro/chain
+ExecStart=/usr/bin/node /opt/arkthro/chain/src/cli.js node --config /opt/arkthro/testnet/node-%i.json
+Restart=always
+RestartSec=3
+# Hardening: the node only needs to read its code and write its own data directory.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/arkthro/testnet/data
+
+[Install]
+WantedBy=multi-user.target

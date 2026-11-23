@@ -2,7 +2,7 @@
 // SLH-DSA-256s key per allocation, each encrypted with the passphrase you choose. Writes:
 //   <dir>/<name>.json      encrypted key files (keep offline; back up on an encrypted USB)
 //   <dir>/addresses.json   public addresses only, the input for scripts/mainnet-genesis.js
-// Usage: node scripts/create-mainnet-vaults.js [--dir ~/cyvber-vault/mainnet] [--founder 50000000]
+// Usage: node scripts/create-mainnet-vaults.js [--dir ~/arkthro-vault/mainnet] [--founder 50000000]
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -11,7 +11,7 @@ import { generateKeyPair, addressFromPublicKey } from '../src/crypto.js';
 import { encryptKeyFile, askPassphrase } from '../src/keyfile.js';
 
 const { values } = parseArgs({ options: { dir: { type: 'string' }, founder: { type: 'string', default: '50000000' } } });
-const dir = values.dir ?? path.join(os.homedir(), 'cyvber-vault', 'mainnet');
+const dir = values.dir ?? path.join(os.homedir(), 'arkthro-vault', 'mainnet');
 const VAULTS = ['ecosystem', 'treasury', 'publicDistribution', 'partners', 'teamPool', 'liquidity', 'founder'];
 const MIN = 16;
 

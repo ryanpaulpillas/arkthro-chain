@@ -1,11 +1,11 @@
-# Putting the CYVBER testnet online
+# Putting the ARKTHRO testnet online
 
-This puts the website at **cyvber.com**, the explorer at **explorer.cyvber.com**, and the network's
-API at **rpc.cyvber.com**, all on one DigitalOcean server with automatic HTTPS. It takes about
+This puts the website at **arkthro.com**, the explorer at **explorer.arkthro.com**, and the network's
+API at **rpc.arkthro.com**, all on one DigitalOcean server with automatic HTTPS. It takes about
 45 minutes, most of it waiting.
 
 What you'll have afterwards: a public **testnet** with 4 post-quantum validators on one server.
-Test CYV has no value. One server means one operator, so it is **not decentralized yet**;
+Test ARKTH has no value. One server means one operator, so it is **not decentralized yet**;
 adding validators on other servers is the next step.
 
 ---
@@ -18,10 +18,10 @@ Follow [FOUNDER-VAULT.md](FOUNDER-VAULT.md): the same steps make the treasury va
 hash-based (SLH-DSA-256s) key kept offline with 3 backups. In short:
 
 ```bash
-mkdir -p ~/cyvber-vault && chmod 700 ~/cyvber-vault
-cd ~/Documents/cyvber-chain
-node src/cli.js keygen --out ~/cyvber-vault/treasury.json --type slh-dsa-256s --encrypt
-node src/cli.js check-key --key ~/cyvber-vault/treasury.json
+mkdir -p ~/arkthro-vault && chmod 700 ~/arkthro-vault
+cd ~/Documents/arkthro-chain
+node src/cli.js keygen --out ~/arkthro-vault/treasury.json --type slh-dsa-256s --encrypt
+node src/cli.js check-key --key ~/arkthro-vault/treasury.json
 ```
 
 Copy the `address cy…` line it prints. You'll need it in step 8. Never upload the key file or the
@@ -30,7 +30,7 @@ passphrase anywhere.
 **2. Create an SSH key** (lets you log in to the server securely, without a password):
 
 ```bash
-ssh-keygen -t ed25519 -C "cyvber-server"
+ssh-keygen -t ed25519 -C "arkthro-server"
 cat ~/.ssh/id_ed25519.pub
 ```
 
@@ -47,14 +47,14 @@ that `cat` prints (it starts with `ssh-ed25519`).
 | Image | **Ubuntu 24.04 (LTS)** |
 | Size | Basic → Regular → **2 vCPU / 4 GB** |
 | Authentication | **SSH Key** → New SSH Key → paste the line from step 2 |
-| Hostname | `cyvber-testnet-1` |
+| Hostname | `arkthro-testnet-1` |
 | Backups | Optional, recommended |
 
 Click **Create Droplet** and copy its **IPv4 address** (for example `203.0.113.25`).
 
 ## Part 3 · GoDaddy DNS
 
-**4.** In GoDaddy: **My Products → cyvber.com → DNS**. Add these records, all pointing at the
+**4.** In GoDaddy: **My Products → arkthro.com → DNS**. Add these records, all pointing at the
 server's IP:
 
 | Type | Name | Value | TTL |
@@ -66,15 +66,15 @@ server's IP:
 | A | `faucet` | *your server IP* | 1/2 hour |
 
 - If there is already an **A record for `@`** (often "Parked"), edit it to your IP instead of adding a second one.
-- If cyvber.com has **Forwarding** turned on, turn it off.
+- If arkthro.com has **Forwarding** turned on, turn it off.
 - If there is a **CNAME for `www`**, delete it before adding the A record.
-- Don't touch **MX** records if you use email on cyvber.com.
+- Don't touch **MX** records if you use email on arkthro.com.
 
-**cyvber.io, cyvber.org, cyvber.co and cyvber.net** (also ours) forward to cyvber.com. In GoDaddy, give each of them two
+**arkthro.io, arkthro.org, arkthro.co and arkthro.net** (also ours) forward to arkthro.com. In GoDaddy, give each of them two
 A records pointing at the same server IP: `@` and `www`. Caddy then redirects them to
-https://cyvber.com with HTTPS. Don't use GoDaddy's own Forwarding for them; it can't do HTTPS.
+https://arkthro.com with HTTPS. Don't use GoDaddy's own Forwarding for them; it can't do HTTPS.
 
-Wait 10–30 minutes, then check on [dnschecker.org](https://dnschecker.org) that `explorer.cyvber.com`
+Wait 10–30 minutes, then check on [dnschecker.org](https://dnschecker.org) that `explorer.arkthro.com`
 shows your IP.
 
 ## Part 4 · Install
@@ -82,14 +82,14 @@ shows your IP.
 **5. Build the package** on your Mac:
 
 ```bash
-cd ~/Documents/cyvber-chain
+cd ~/Documents/arkthro-chain
 bash deploy/make-bundle.sh
 ```
 
 **6. Upload it** (replace the IP):
 
 ```bash
-scp cyvber-bundle.tar.gz root@203.0.113.25:/root/
+scp arkthro-bundle.tar.gz root@203.0.113.25:/root/
 ```
 
 **7. Log in to the server:**
@@ -103,13 +103,13 @@ key with your Anthropic API key for the website's AI assistant, from
 [console.anthropic.com](https://console.anthropic.com/) → API Keys):
 
 ```bash
-tar xzf cyvber-bundle.tar.gz
-TREASURY=cy…your-treasury-address ANTHROPIC_API_KEY=sk-ant-… bash cyvber-bundle/chain/deploy/setup-server.sh
+tar xzf arkthro-bundle.tar.gz
+TREASURY=cy…your-treasury-address ANTHROPIC_API_KEY=sk-ant-… bash arkthro-bundle/chain/deploy/setup-server.sh
 ```
 
 Leave out `ANTHROPIC_API_KEY=…` to install without the AI assistant; you can add it later by
 running the same command again with the key. The key is stored only on the server, in
-`/etc/cyvber/assistant.env`. Each visitor question is a paid Claude API call (a few cents at
+`/etc/arkthro/assistant.env`. Each visitor question is a paid Claude API call (a few cents at
 most; the site's content is cached), and each visitor is limited to 20 questions per 10 minutes.
 Set a monthly spend limit in the Anthropic Console.
 
@@ -126,13 +126,13 @@ help them; the validators themselves are never cut off. Check it with `node src/
 on the server (it lists blocked addresses there) or `GET /firewall`. Tune it with a `firewall`
 section in a node's config, e.g. `"firewall": { "rates": { "tx": 60 }, "allow": ["203.0.113.7"] }`.
 
-**9. Open** https://cyvber.com and https://explorer.cyvber.com. If HTTPS isn't ready yet, wait a
+**9. Open** https://arkthro.com and https://explorer.arkthro.com. If HTTPS isn't ready yet, wait a
 minute: the certificates are requested the first time.
 
 **10. Back up the server's keys** (run this on your Mac):
 
 ```bash
-scp -r root@203.0.113.25:/opt/cyvber/testnet/keys ~/Documents/cyvber-testnet-keys-backup
+scp -r root@203.0.113.25:/opt/arkthro/testnet/keys ~/Documents/arkthro-testnet-keys-backup
 ```
 
 Keep the backup private. These are the 4 validator keys and the faucet key.
@@ -144,8 +144,8 @@ Keep the backup private. These are the 4 validator keys and the faucet key.
 **Update the code or website:** repeat steps 5–7, then on the server:
 
 ```bash
-tar xzf cyvber-bundle.tar.gz
-bash cyvber-bundle/chain/deploy/setup-server.sh
+tar xzf arkthro-bundle.tar.gz
+bash arkthro-bundle/chain/deploy/setup-server.sh
 ```
 
 The chain, its data and its keys are kept; only the code and website are replaced.
@@ -153,10 +153,10 @@ The chain, its data and its keys are kept; only the code and website are replace
 **See what a node is doing:**
 
 ```bash
-systemctl status cyvber-node@1        # running?
-journalctl -u cyvber-node@1 -f        # live log (Ctrl+C to stop)
-systemctl restart cyvber-node@1       # restart one node
-journalctl -u cyvber-assistant -f     # the AI assistant's log (one line per question)
+systemctl status arkthro-node@1        # running?
+journalctl -u arkthro-node@1 -f        # live log (Ctrl+C to stop)
+systemctl restart arkthro-node@1       # restart one node
+journalctl -u arkthro-assistant -f     # the AI assistant's log (one line per question)
 ```
 
 ## Adding a validator on another server
@@ -166,16 +166,16 @@ Independent operators join by staking; nobody needs to edit genesis.
 1. The operator creates a validator key on their server and an owner key (holding the stake) on
    their own computer:
    `node src/cli.js keygen --out validator.json` and `node src/cli.js keygen --out owner.json --encrypt`.
-2. They get at least the minimum stake (100,000 test CYV on the testnet) into the owner account.
+2. They get at least the minimum stake (100,000 test ARKTH on the testnet) into the owner account.
 3. They start their node with a config like `node-1.json`, without `faucetKey`, with
-   `"peers": ["https://rpc.cyvber.com"]`, their own public HTTPS address as
+   `"peers": ["https://rpc.arkthro.com"]`, their own public HTTPS address as
    `"publicUrl": "https://node.their-domain.com"` (behind Caddy, like ours), and a trusted snapshot
    block so it doesn't replay the whole chain: `"trustedBlock": { "height": <h>, "hash": "<hash>" }`.
    On start the node announces its `publicUrl`, and the network passes consensus messages on to it;
    nobody has to edit our servers. Take `h` and `hash` from
-   `https://rpc.cyvber.com/status` (the `snapshots` list), ideally checked against the explorer.
+   `https://rpc.arkthro.com/status` (the `snapshots` list), ideally checked against the explorer.
 4. Once their node has caught up, they stake in:
-   `node src/cli.js stake join --key owner.json --validator-key validator.json --amount 100000 --rpc https://rpc.cyvber.com`
+   `node src/cli.js stake join --key owner.json --validator-key validator.json --amount 100000 --rpc https://rpc.arkthro.com`
 
 From the next block on, the new validator must sign. Missing 500 blocks in a row costs 0.1% of
 the stake and a day out of the set; signing two different blocks costs 5% and a permanent ban.
@@ -194,7 +194,7 @@ double-signing (5% of the stake and a permanent ban). So:
 
 ## Before you announce it
 
-- File the **CYVBER trademark** at IPOPHL (the name becomes public the day this goes live).
+- File the **ARKTHRO trademark** at IPOPHL (the name becomes public the day this goes live).
 - Get the **logo similarity check** done.
 - Fill in the **"to confirm"** items on the website (contact, repository link, figures).
-- Keep saying clearly that **test CYV has no value**, and don't promise it will become real CYVBER.
+- Keep saying clearly that **test ARKTH has no value**, and don't promise it will become real ARKTHRO.

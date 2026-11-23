@@ -12,7 +12,7 @@ function setup(dataDir) {
   const keys = Array.from({ length: 4 }, () => generateKeyPair('ml-dsa-87'));
   const alice = generateKeyPair();
   const genesis = {
-    chainId: 'cyvber-store', timestamp: 1_000_000, coin: { name: 'CYVBER', symbol: 'CYV', decimals: 18 },
+    chainId: 'arkthro-store', timestamp: 1_000_000, coin: { name: 'ARKTHRO', symbol: 'ARKTH', decimals: 18 },
     blockTimeMs: 1000, maxTxsPerBlock: 100, minFee: '1000', blockReward: '0', maxSupply: (10n ** 30n).toString(),
     validators: keys.map((k) => k.publicKey), alloc: { [addressFromPublicKey(alice.publicKey)]: (10n ** 24n).toString() },
   };
@@ -33,10 +33,10 @@ function setup(dataDir) {
 }
 
 test('compact block files decode to the identical block and are much smaller', () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cyvber-bs-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'arkthro-bs-'));
   try {
     const ctx = setup(null);
-    ctx.chain.addTx(createTransfer({ chainId: ctx.genesis.chainId, privateKey: ctx.alice.privateKey, to: 'cy' + 'ab'.repeat(32), amount: 5n, fee: 1000n, nonce: 0, memo: 'hi' }));
+    ctx.chain.addTx(createTransfer({ chainId: ctx.genesis.chainId, privateKey: ctx.alice.privateKey, to: 'ar' + 'ab'.repeat(32), amount: 5n, fee: 1000n, nonce: 0, memo: 'hi' }));
     ctx.next();
     const block = ctx.next(); // has a lastCommit and a commit, ML-DSA-87 signatures
     const store = new BlockStore(path.join(dir, 'blocks'));
@@ -59,7 +59,7 @@ test('compact block files decode to the identical block and are much smaller', (
 });
 
 test('a node keeps only recent blocks in memory, reads older ones from disk, and restarts', () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cyvber-mem-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'arkthro-mem-'));
   try {
     const ctx = setup(dir);
     const first = ctx.next();

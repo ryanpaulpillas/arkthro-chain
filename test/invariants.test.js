@@ -1,4 +1,4 @@
-// Randomised check of the money rules: after every block, the CYV that exists (balances + stake +
+// Randomised check of the money rules: after every block, the ARKTH that exists (balances + stake +
 // unpaid pools) must equal the recorded supply, no balance may go negative, and nonces only rise.
 // Random transfers, self-transfers, vesting grants, validator joins/leaves and doomed transactions
 // (overspends, replays, wrong nonces) are thrown at the chain for many blocks.
@@ -28,7 +28,7 @@ test('money is never created or lost under random traffic', () => {
   const users = Array.from({ length: 6 }, () => generateKeyPair('ed25519'));
   const addr = (k) => addressFromPublicKey(k.publicKey);
   const genesis = {
-    chainId: 'cyvber-fuzz', timestamp: 1_000_000, coin: { name: 'CYVBER', symbol: 'CYV', decimals: 18 },
+    chainId: 'arkthro-fuzz', timestamp: 1_000_000, coin: { name: 'ARKTHRO', symbol: 'ARKTH', decimals: 18 },
     blockTimeMs: 1000, maxTxsPerBlock: 50, minFee: '1000', blockReward: '0', maxSupply: (500_000_000n * ONE).toString(),
     validators: vals.map((k) => k.publicKey),
     alloc: Object.fromEntries(users.map((u, i) => [addr(u), (BigInt(i + 1) * 300_000n * ONE).toString()])),

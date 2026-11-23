@@ -36,7 +36,7 @@ test('editing an encrypted key file (address or ciphertext) makes it fail', () =
 });
 
 test('CLI: keygen --encrypt, check-key, encrypt an existing key, and refuse a bad passphrase', () => {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cyvber-vault-'));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'arkthro-vault-'));
   try {
     const run = (args, input) => spawnSync(process.execPath, [CLI, ...args], { input, encoding: 'utf8' });
     const vault = path.join(dir, 'vault.json');
@@ -48,7 +48,7 @@ test('CLI: keygen --encrypt, check-key, encrypt an existing key, and refuse a ba
 
     r = run(['check-key', '--key', vault], `${PASS}\n`);
     assert.equal(r.status, 0, r.stderr);
-    assert.match(r.stdout, /OK: .* opens and controls cy[0-9a-f]{64} \(slh-dsa-256s, encrypted\)/);
+    assert.match(r.stdout, /OK: .* opens and controls ar[0-9a-f]{64} \(slh-dsa-256s, encrypted\)/);
     r = run(['check-key', '--key', vault], 'not the passphrase!\n');
     assert.notEqual(r.status, 0);
     assert.match(r.stderr, /wrong passphrase/);
@@ -66,4 +66,15 @@ test('CLI: keygen --encrypt, check-key, encrypt an existing key, and refuse a ba
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('key files made before the ARKTHRO rename ("cy" addresses) still open', async () => {
+  const { generateKeyPair, addressFromPublicKey } = await import('../src/crypto.js');
+  const { encryptKeyFile, decryptKeyFile } = await import('../src/keyfile.js');
+  const k = generateKeyPair('ml-dsa-65');
+  const current = addressFromPublicKey(k.publicKey);
+  const legacy = { address: 'cy' + current.slice(2), ...k };
+  const opened = decryptKeyFile(encryptKeyFile(legacy, 'old vault passphrase'), 'old vault passphrase');
+  assert.equal(opened.privateKey, k.privateKey);
+  assert.throws(() => decryptKeyFile(encryptKeyFile({ ...legacy, address: 'cy' + '00'.repeat(32) }, 'old vault passphrase'), 'old vault passphrase'), /inconsistent/);
 });

@@ -1,14 +1,14 @@
 {
-  "name": "cyvber-chain",
+  "name": "arkthro-chain",
   "version": "0.1.0",
-  "description": "CYVBER blockchain node: native coin CYVBER, proof-of-authority devnet/testnet",
+  "description": "ARKTHRO blockchain node: native coin ARKTHRO, proof-of-authority devnet/testnet",
   "type": "module",
   "private": true,
   "engines": {
     "node": ">=20"
   },
   "bin": {
-    "cyvber": "src/cli.js"
+    "arkthro": "src/cli.js"
   },
   "scripts": {
     "devnet:init": "node scripts/init-devnet.js",

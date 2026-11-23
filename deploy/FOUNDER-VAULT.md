@@ -1,7 +1,7 @@
 # Founder and treasury vault keys
 
-How to create and keep the keys that will hold large CYVBER allocations: the founders' 8%
-(40,000,000 CYV) and the treasury. The same steps work for the testnet treasury today.
+How to create and keep the keys that will hold large ARKTHRO allocations: the founders' 8%
+(40,000,000 ARKTH) and the treasury. The same steps work for the testnet treasury today.
 
 ## The setup
 
@@ -11,7 +11,7 @@ How to create and keep the keys that will hold large CYVBER allocations: the fou
 | Encryption | **Passphrase-encrypted file** (`--encrypt`) | The file alone is useless to a thief. The passphrase is stretched with scrypt and the key sealed with AES-256-GCM. |
 | One key per founder | Yes | Each founder controls their own share. |
 | Where it lives | **Offline**, never on a server | Only the vault's *address* goes into the chain's genesis and onto servers. |
-| Backups | **3 copies**, in 3 places | Losing the key means losing the tokens: nobody, including CYVBER, can recover them. |
+| Backups | **3 copies**, in 3 places | Losing the key means losing the tokens: nobody, including ARKTHRO, can recover them. |
 
 ## Create a vault (once per founder)
 
@@ -19,7 +19,7 @@ How to create and keep the keys that will hold large CYVBER allocations: the fou
    `~/Desktop` are often synced; use a folder in your home directory instead:
 
    ```bash
-   mkdir -p ~/cyvber-vault && chmod 700 ~/cyvber-vault
+   mkdir -p ~/arkthro-vault && chmod 700 ~/arkthro-vault
    ```
 
 2. **Go offline.** Turn off Wi-Fi while creating the key.
@@ -30,16 +30,16 @@ How to create and keep the keys that will hold large CYVBER allocations: the fou
 4. **Create the encrypted vault key:**
 
    ```bash
-   cd ~/Documents/cyvber-chain
-   node src/cli.js keygen --out ~/cyvber-vault/founder-ryan.json --type slh-dsa-256s --encrypt
+   cd ~/Documents/arkthro-chain
+   node src/cli.js keygen --out ~/arkthro-vault/founder-ryan.json --type slh-dsa-256s --encrypt
    ```
 
-   It asks for the passphrase twice and prints the vault's **address** (`cy…`, 64 characters).
+   It asks for the passphrase twice and prints the vault's **address** (`ar…`, 64 characters).
 
 5. **Test that it opens** (this is how you'll test every backup too):
 
    ```bash
-   node src/cli.js check-key --key ~/cyvber-vault/founder-ryan.json
+   node src/cli.js check-key --key ~/arkthro-vault/founder-ryan.json
    ```
 
    It should print `OK: … opens and controls cy… (slh-dsa-256s, encrypted)`.
@@ -68,7 +68,7 @@ key from the computer if you don't need it there.
 The command-line wallet asks for the passphrase whenever the vault signs, for example:
 
 ```bash
-node src/cli.js send --key ~/cyvber-vault/founder-ryan.json --to cy… --amount 1000
+node src/cli.js send --key ~/arkthro-vault/founder-ryan.json --to cy… --amount 1000
 ```
 
 Founder tokens are locked for the first year after mainnet anyway. Before relying on the vault,
@@ -103,7 +103,7 @@ before funds move. One lost or stolen key is then not enough to lose or steal an
 
    ```bash
    node src/cli.js multisig propose --vault treasury-vault.json --to cy… --amount 1000 --out spend.json
-   node src/cli.js multisig sign --tx spend.json --key ~/cyvber-vault/member-ryan.json
+   node src/cli.js multisig sign --tx spend.json --key ~/arkthro-vault/member-ryan.json
    node src/cli.js multisig sign --tx spend.json --key member-b.json     # on member B's computer
    node src/cli.js multisig submit --tx spend.json
    ```

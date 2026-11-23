@@ -94,7 +94,7 @@ async function freePort() {
 test('end to end: a live node refuses floods, oversized bodies and garbage, and bans the sender', async () => {
   const validator = generateKeyPair('ml-dsa-65');
   const genesis = {
-    chainId: 'cyvber-firewall-test', timestamp: Date.now(), coin: { name: 'CYVBER', symbol: 'CYVBER', decimals: 18 },
+    chainId: 'arkthro-firewall-test', timestamp: Date.now(), coin: { name: 'ARKTHRO', symbol: 'ARKTHRO', decimals: 18 },
     blockTimeMs: 500, maxTxsPerBlock: 10, minFee: '1000', blockReward: '0', maxSupply: (1_000_000_000n * ONE).toString(),
     validators: [validator.publicKey], alloc: { [addressFromPublicKey(generateKeyPair().publicKey)]: (10n * ONE).toString() },
   };
@@ -149,7 +149,7 @@ test('end to end: a live node refuses floods, oversized bodies and garbage, and 
 test('behind a local proxy, a forged X-Forwarded-For cannot pass as local to slip past the firewall', async () => {
   const validator = generateKeyPair('ml-dsa-65');
   const genesis = {
-    chainId: 'cyvber-firewall-proxy', timestamp: Date.now(), coin: { name: 'CYVBER', symbol: 'CYVBER', decimals: 18 },
+    chainId: 'arkthro-firewall-proxy', timestamp: Date.now(), coin: { name: 'ARKTHRO', symbol: 'ARKTHRO', decimals: 18 },
     blockTimeMs: 500, maxTxsPerBlock: 10, minFee: '1000', blockReward: '0', maxSupply: (1_000_000_000n * ONE).toString(),
     validators: [validator.publicKey], alloc: {},
   };
