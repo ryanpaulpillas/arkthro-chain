@@ -84,6 +84,12 @@ The Q-Day Tripwire in `src/tripwire.js` is described in *The ARKTHRO Tripwire: O
 Consensus-Level Q-Day Alarm* (Ryan Paul G. Pillas, 2026). Reference implementation: release tag
 `arkthro-tripwire-v0.2`. To cite it, use `CITATION.cff`.
 
+## Contact
+
+Website: https://arkthro.com  
+Email: paulgallardopillas@gmail.com (temporary, while ARKTHRO is being built)  
+Security issues: please email the address above instead of opening a public issue. See [SECURITY.md](SECURITY.md).
+
 ## License
 
 Apache License 2.0 (see `LICENSE` and `NOTICE`). The name ARKTHRO and the logo are not covered by the licence.
