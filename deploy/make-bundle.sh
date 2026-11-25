@@ -5,10 +5,10 @@
 set -euo pipefail
 
 CHAIN="$(cd "$(dirname "$0")/.." && pwd)"
-# The website and assistant folders sit next to this one (older checkouts still use argeni-* names).
+# The website and assistant folders sit next to this one.
 pick() { for d in "$@"; do [ -d "$d" ] && { echo "$d"; return; }; done; echo "$1"; }
-SITE="${SITE:-$(pick "$CHAIN/../arkthro-site" "$CHAIN/../argeni-site")}"
-ASSISTANT="${ASSISTANT:-$(pick "$CHAIN/../arkthro-assistant" "$CHAIN/../argeni-assistant")}"
+SITE="${SITE:-$(pick "$CHAIN/../arkthro-site")}"
+ASSISTANT="${ASSISTANT:-$(pick "$CHAIN/../arkthro-assistant")}"
 [ -d "$SITE" ] || { echo "Website folder not found: $SITE (set SITE=/path/to/site)"; exit 1; }
 OUT="${OUT:-$PWD/arkthro-bundle.tar.gz}"
 TMP="$(mktemp -d)"

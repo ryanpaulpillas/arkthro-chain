@@ -48,7 +48,7 @@ test('ML-DSA-87 and SLH-DSA-256s (NIST category 5) sign and verify; ML-DSA-87 is
     const sig = sign('arkthro', k.privateKey);
     assert.equal(sig.length, bytes * 2);
     assert.equal(verify('arkthro', sig, k.publicKey), true);
-    assert.equal(verify('argenI', sig, k.publicKey), false);
+    assert.equal(verify('arkthrO', sig, k.publicKey), false);
     assert.match(addressFromPublicKey(k.publicKey), /^ar[0-9a-f]{64}$/, '256-bit address');
   }
   // A signature from one category-5 scheme never verifies under the other.

@@ -2,8 +2,7 @@ node_modules/
 devnet/
 *.key.json
 testnet/
-arkthro-bundle*
+*-bundle*
 devnet-backup*/
 legal/
 .DS_Store
-argeni-bundle*
